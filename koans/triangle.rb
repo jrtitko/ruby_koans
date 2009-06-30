@@ -14,8 +14,23 @@
 #   about_triangle_project_2.rb
 #
 def triangle(a, b, c)
-  # WRITE THIS CODE
+  equilateral?(a, b, c) ||
+   isosceles?(a, b, c) ||
+   :scalene
 end
+
+def equilateral?(a, b, c)
+  if (a==b && a==c)
+    :equilateral
+  end
+end
+
+def isosceles?(a, b, c)
+  if (a==b) || (b==c) || (a==c)
+    :isosceles
+  end
+end
+
 
 # Error class used in part 2.  No need to change this code.
 class TriangleError < StandardError
