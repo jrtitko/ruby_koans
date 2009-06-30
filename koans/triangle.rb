@@ -14,9 +14,23 @@
 #   about_triangle_project_2.rb
 #
 def triangle(a, b, c)
+  raise TriangleError unless valid_triangle?(a, b, c)
   equilateral?(a, b, c) ||
    isosceles?(a, b, c) ||
    :scalene
+end
+
+def valid_triangle?(a, b, c)
+  return sides_are_positive?(a, b, c) &&
+  each_side_is_less_than_the_sum_of_the_other_two?(a, b, c)  
+end
+
+def sides_are_positive?(a, b, c)
+  [a, b, c].min > 0
+end
+
+def each_side_is_less_than_the_sum_of_the_other_two?(a, b, c)
+  (a < (b + c)) && (b < (a + c)) && (c < (a + b))
 end
 
 def equilateral?(a, b, c)
@@ -30,6 +44,7 @@ def isosceles?(a, b, c)
     :isosceles
   end
 end
+
 
 
 # Error class used in part 2.  No need to change this code.
