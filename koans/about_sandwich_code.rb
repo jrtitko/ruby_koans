@@ -1,6 +1,6 @@
 require 'edgecase'
 
-class AboutUsingBlocks < EdgeCase::Koan
+class AboutSandwichCode < EdgeCase::Koan
 
   def count_lines(file_name)
     file = open(file_name)
