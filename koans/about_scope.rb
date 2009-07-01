@@ -74,6 +74,8 @@ class AboutScope < EdgeCase::Koan
 
   def test_you_can_get_a_list_of_constants_for_any_class_or_module
     assert_equal ["Dog"], Jims.constants
-    assert_equal 94, Object.constants.size
+    # very flaky 94 through cmd-R in textmate.  122 from rake cmd line
+    # assert_equal 94, Object.constants.size
+    assert Object.constants.size > 80
   end
 end
