@@ -30,8 +30,45 @@ require 'edgecase'
 # Your goal is to write the score method.
 
 def score(dice)
-  # You need to write this method
+  score_threes(dice) + score_singles(dice)    
 end
+
+def throw_frequencies(dice)
+  dice.inject(Hash.new(0)) do |hash, die|
+    hash[die] += 1
+    hash
+  end
+end
+
+def triple_score(die)
+  (die == 1) ? 1000 : die * 100
+end
+
+def score_threes(dice)
+  count = throw_frequencies(dice)
+  count.keys.each do |die|
+    if count[die] >= 3
+      return triple_score(die)
+    end
+  end
+  0
+end
+
+def single_score(die, n)
+  return 50 * singles_in_throw(n) if die == 5
+  return 100 * singles_in_throw(n) if die == 1
+  0
+end
+
+def score_singles(dice)
+  count = throw_frequencies(dice)
+  single_score(1, count[1]) + single_score(5, count[5])
+end
+
+def singles_in_throw(n)
+  (n >= 3) ? n - 3 : n
+end
+
 
 class AboutScoringAssignment < EdgeCase::Koan
   def test_score_of_an_empty_list_is_zero
@@ -67,7 +104,7 @@ class AboutScoringAssignment < EdgeCase::Koan
   end
 
   def test_score_of_mixed_is_sum
-    assert_equal 50, score([2,5,2,2,3])
+    assert_equal 250, score([2,5,2,2,3])
     assert_equal 550, score([5,5,5,5])
   end
 
