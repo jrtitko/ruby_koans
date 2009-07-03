@@ -47,17 +47,20 @@ class Proxy
   end
   
   def call_target_object(message, args)
-    if (unwrapped_arguments(args).nil?)
-      return @object.send(message)
-    else
+    begin
       return @object.send(message, unwrapped_arguments(args))
+    rescue
+      return @object.send(message)
     end
   end
 
   def unwrapped_arguments(args)
-    return nil if (args.size==0)
+    raise NoArgumentsError if (args.size==0)
     return args[0] if (args.size==1)
     args
+  end
+  
+  class NoArgumentsError < RuntimeError
   end
   
 end
