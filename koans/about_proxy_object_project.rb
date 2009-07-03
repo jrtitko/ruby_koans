@@ -49,7 +49,7 @@ class Proxy
   def call_target_object(message, args)
     begin
       return @object.send(message, unwrapped_arguments(args))
-    rescue
+    rescue NoArgumentsError
       return @object.send(message)
     end
   end
