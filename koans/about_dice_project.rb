@@ -49,6 +49,10 @@ class AboutDiceSet < EdgeCase::Koan
     # If the rolls are random, then it is possible (although not
     # likely) that two consecutive rolls are equal.  What would be a
     # better way to test this.
+    # You could break out and re-define the rand block on an instance to
+    # guarantee the first and second run return distinct results in the block.
+    # I'd prefer an explicit Strategy and plug in my own stub implementation
+    # if it was any more complex than just rand(x) + 1
   end
 
   def test_you_can_roll_different_numbers_of_dice

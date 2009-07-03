@@ -13,9 +13,56 @@ require 'edgecase'
 # of the Proxy class is given in the AboutProxyObjectProject koan.
 
 class Proxy
+  attr_reader :messages
+  
   def initialize(target_object)
-    @object = target_object
+    @object = target_object 
+    @messages = []
   end
+
+  def method_missing(message, *args) #TODO &block not in specs?
+    insure_target_object_responds_to message
+    record message
+    call_target_object message, args
+  end
+    
+  def called?(message)
+    @messages.include?(message)
+  end
+  
+  def number_of_times_called(message)
+    @messages.inject(0) do |count, msg|
+      count += 1 if msg == message
+      count
+    end
+  end
+  
+  private  
+  def insure_target_object_responds_to(message)
+    raise NoMethodError unless (@object.respond_to? message)
+  end
+  
+  def record(message)
+    @messages << message
+  end
+  
+  def call_target_object(message, args)
+    begin
+      return @object.send(message, unwrapped_arguments(args))
+    rescue NoArgumentsError
+      return @object.send(message)
+    end
+  end
+
+  def unwrapped_arguments(args)
+    raise NoArgumentsError if (args.size==0)
+    return args[0] if (args.size==1)
+    args
+  end
+  
+  class NoArgumentsError < RuntimeError
+  end
+  
 end
 
 # The proxy object should pass the following Koan:

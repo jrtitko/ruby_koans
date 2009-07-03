@@ -30,8 +30,57 @@ require 'edgecase'
 # Your goal is to write the score method.
 
 def score(dice)
-  # You need to write this method
+  greed_roll = GreedRoll.new(dice)
+  greed_roll.score    
 end
+
+class GreedRoll
+  def initialize(dice)
+    @dice = dice
+    @throw_count = throw_frequencies
+  end
+
+  def score
+    score_threes + score_singles
+  end
+  
+  private
+    
+  def score_threes
+    @throw_count.keys.each do |die|
+      if @throw_count[die] >= 3
+        return triple_score(die)
+      end
+    end
+    0
+  end
+
+  def throw_frequencies
+    @dice.inject(Hash.new(0)) do |hash, die|
+      hash[die] += 1
+      hash
+    end
+  end
+  
+  def triple_score(die)
+    (die == 1) ? 1000 : die * 100
+  end
+
+  def score_singles
+    single_score(100, @throw_count[1]) + single_score(50, @throw_count[5])
+  end
+
+  def singles_in_throw(n)
+    (n >= 3) ? n - 3 : n
+  end
+
+  def single_score(value, n)
+    value * singles_in_throw(n)
+  end
+  
+end
+
+
 
 class AboutScoringAssignment < EdgeCase::Koan
   def test_score_of_an_empty_list_is_zero
@@ -67,7 +116,7 @@ class AboutScoringAssignment < EdgeCase::Koan
   end
 
   def test_score_of_mixed_is_sum
-    assert_equal 50, score([2,5,2,2,3])
+    assert_equal 250, score([2,5,2,2,3])
     assert_equal 550, score([5,5,5,5])
   end
 
