@@ -75,6 +75,14 @@ class AboutMessagePassing < EdgeCase::Koan
     assert_raise(___) do
       typical.foobar
     end
+  end
+  
+  def test_exceptions_mention_missing_method_in_the_message
+    typical = TypicalObject.new
+    begin
+      typical.foobar
+    rescue NoMethodError => exception
+    end
     assert_match(/foobar/, exception.message)
   end
 
